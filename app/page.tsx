@@ -1,34 +1,9 @@
-import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { createClient } from "@/utils/supabase/server";
-import { createClient as createClientClient } from "@/utils/supabase/client";
-import { Check, X } from "lucide-react";
 import CheckInput from "@/components/CheckInput";
-
-export type Food = { name: string; id: number; qty: number; price: number };
-export type FoodBought = { food_id: number; buyer: string; qty: number };
-
-export const formatRupiah = (value: string | number) => {
-  const number = String(value).replace(/\D/g, "");
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  })
-    .format(Number(number))
-    .replace("IDR", "Rp");
-};
+import { Food, FoodBought } from "@/types";
+import { formatRupiah } from "@/utils/utils";
 
 function calculateBuyerPayments(foods: Food[], food_boughts: FoodBought[], buyers: string[]): Record<string, number> {
   const buyerPayments: Record<string, number> = {};
@@ -48,7 +23,6 @@ function calculateBuyerPayments(foods: Food[], food_boughts: FoodBought[], buyer
 
     // Compute total qty bought by all buyers
     const foodBuyersCount = relevantPurchases.reduce((sum, fb) => sum + fb.qty, 0);
-    console.log({ food, foodBuyersCount });
 
     if (foodBuyersCount === 0) continue; // Avoid division by zero
 

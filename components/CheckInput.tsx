@@ -1,14 +1,14 @@
 "use client";
 
-import { FoodBought } from "@/app/page";
 import { Input } from "./ui/input";
 import { createClient } from "@/utils/supabase/client";
 import { useDebouncedCallback } from "use-debounce";
 import { useRouter } from "next/navigation";
+import { FoodBought } from "@/types";
 
 export default function CheckInput({ boughtFood }: { boughtFood: FoodBought }) {
   const router = useRouter();
-  async function upsertFoodBought({ supabase, qty }) {
+  async function upsertFoodBought({ supabase, qty }: any) {
     const { data, error } = await supabase
       .from("food_boughts")
       .upsert([{ food_id: boughtFood.food_id, buyer: boughtFood.buyer, qty }], { onConflict: ["food_id", "buyer"] });
