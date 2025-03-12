@@ -2,9 +2,9 @@
 
 import { Input } from "./ui/input";
 import { createClient } from "@/utils/supabase/client";
-import { useDebouncedCallback } from "use-debounce";
 import { useRouter } from "next/navigation";
 import { Food, FoodBought } from "@/types";
+import { FormEventHandler } from "react";
 
 export default function CheckInput({
   boughtFood,
@@ -29,12 +29,12 @@ export default function CheckInput({
     }
   }
 
-  const updateBoughtFood = useDebouncedCallback((event) => {
+  const updateBoughtFood: FormEventHandler<HTMLInputElement> = (event) => {
     const supabase = createClient();
-    const qty = event.target.value.length;
+    const qty = event.currentTarget.value.length;
 
     upsertFoodBought({ supabase, qty });
-  }, 500);
+  };
 
   return (
     <Input
