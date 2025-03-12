@@ -83,13 +83,9 @@ export default async function Home() {
                 const boughtFood = food_boughts.find((fb) => fb.buyer === b.buyer && fb.food_id === f.id);
                 return (
                   <TableCell className="text-center border-x-2 !min-w-28">
-                    {boughtFood ? (
-                      <div className="flex gap-0.5 items-center justify-center">
-                        <CheckInput boughtFood={boughtFood} />
-                      </div>
-                    ) : (
-                      ""
-                    )}
+                    <div className="flex gap-0.5 items-center justify-center">
+                      <CheckInput boughtFood={boughtFood} food={f} buyer={b.buyer} />
+                    </div>
                   </TableCell>
                 );
               })}

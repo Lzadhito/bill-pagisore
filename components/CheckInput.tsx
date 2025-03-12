@@ -4,14 +4,22 @@ import { Input } from "./ui/input";
 import { createClient } from "@/utils/supabase/client";
 import { useDebouncedCallback } from "use-debounce";
 import { useRouter } from "next/navigation";
-import { FoodBought } from "@/types";
+import { Food, FoodBought } from "@/types";
 
-export default function CheckInput({ boughtFood }: { boughtFood: FoodBought }) {
+export default function CheckInput({
+  boughtFood,
+  food,
+  buyer,
+}: {
+  boughtFood?: FoodBought;
+  food: Food;
+  buyer: string;
+}) {
   const router = useRouter();
   async function upsertFoodBought({ supabase, qty }: any) {
     const { data, error } = await supabase
       .from("food_boughts")
-      .upsert([{ food_id: boughtFood.food_id, buyer: boughtFood.buyer, qty }], { onConflict: ["food_id", "buyer"] });
+      .upsert([{ food_id: food.id, buyer: buyer, qty }], { onConflict: ["food_id", "buyer"] });
 
     if (error) {
       console.error("Error upserting food_boughts:", error);
@@ -30,7 +38,7 @@ export default function CheckInput({ boughtFood }: { boughtFood: FoodBought }) {
 
   return (
     <Input
-      defaultValue={"x".repeat(boughtFood.qty)}
+      defaultValue={"x".repeat(boughtFood?.qty || 0)}
       className="border-none text-center font-bold text-lg"
       onInput={updateBoughtFood}
     />
